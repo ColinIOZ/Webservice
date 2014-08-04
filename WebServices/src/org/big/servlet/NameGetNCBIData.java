@@ -39,15 +39,23 @@ public class NameGetNCBIData extends HttpServlet {
 		response.setCharacterEncoding("utf-8");
 		PrintWriter out=response.getWriter();
 		String scientificName=request.getParameter("scientificName");
+		String db=request.getParameter("db");
 		String retstart=request.getParameter("retstart");
 		try {
+			String apiUrl = "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi";
+			String param = "retmode=json";
 			if(scientificName != null && !"".equals(scientificName)){
 				if(scientificName.indexOf(" ") != -1){
 					scientificName = scientificName.replace(" ", "+");
 				}
+				param += "&term=" + scientificName;
 			}
-			String apiUrl = "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi";
-			String param = "db=gene&term="+scientificName+"&retmode=json&retstart="+retstart;
+			if(db != null && !"0".equals(db)){
+				param += "&db=" + db;
+			}
+			if(retstart != null && !"".equals(retstart)){
+				param += "&retstart=" + retstart;
+			}
 			System.out.println(param);
 			WebAPI wa = new WebAPI();
 			wa.setAPIurl(apiUrl);
@@ -56,13 +64,13 @@ public class NameGetNCBIData extends HttpServlet {
 			
 			JsonConfig jc=new JsonConfig();
 			JSONObject job=JSONObject.fromObject(r,jc);
+			System.out.println(job);
 			int count = Integer.valueOf((String) job.getJSONObject("esearchresult").get("count")) ;
 			int start = Integer.valueOf((String) job.getJSONObject("esearchresult").get("retstart")) ;
-			System.out.println(job);
 			if(job.getJSONObject("esearchresult").getJSONArray("idlist").size() > 0){
 				
 				String apiUrl2 = "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi";
-				String param2 = "db=gene&retmode=json&id=";
+				String param2 = "db="+db+"&retmode=json&id=";
 				for(int i = 0; i < job.getJSONObject("esearchresult").getJSONArray("idlist").size(); i++){
 					param2 += job.getJSONObject("esearchresult").getJSONArray("idlist").getString(i)+",";
 				}

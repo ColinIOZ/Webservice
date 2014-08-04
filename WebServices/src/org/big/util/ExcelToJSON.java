@@ -7,6 +7,8 @@ import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.big.webapi.WebAPI;
+
 import net.sf.json.JSONObject;
 import net.sf.json.JsonConfig;
 
@@ -98,9 +100,33 @@ public class ExcelToJSON {
 		}
 
 	}
+	public static void returnDBJSONFile() {
+		try {
+			String apiUrl = "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/einfo.fcgi";
+			String param = "retmode=json";
+			WebAPI wa = new WebAPI();
+			wa.setAPIurl(apiUrl);
+			wa.setParameter(param);
+			String data = wa.accessAPI();
+			
+			//将json数据写入文件
+			String path = System.getProperty("user.dir") + "\\WebContent\\json\\db.json";
+			FileWriter fw = new FileWriter(path);
+			PrintWriter out = new PrintWriter(fw);
+			out.write(data.toString());
+			out.println();
+			fw.close();
+			out.close();
+			
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		
+	}
 
 
 	public static void main(String[] args) {
-		ExcelToJSON.returnJSONFile();
+		ExcelToJSON.returnDBJSONFile();
 	}
 }
