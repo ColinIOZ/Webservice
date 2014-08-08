@@ -721,6 +721,190 @@ $(function(){
 					});
 					rs += "</table>";
 				}
+				if(db == "epigenomics"){
+					rs += "<table align='center' >";
+					var num = 1;
+					$.each(data.result,function(i,obj){
+						if(i != "uids"){
+							rs += "<tr><td valign='top' width='10px;'>"+(data.start+num)+"、</td>";
+							rs += "<td><a href='http://www.ncbi.nlm.nih.gov/epigenomics/"+obj.uid+"'>"+obj.title+"</a><br>";
+							rs += obj.summary+"<br>";
+							rs += "<font color='silver'>ExperimentEpigenomics ID: "+obj.uid+" Accession number: "+obj.accession+"</font><br>";
+							rs += "<a href='http://www.ncbi.nlm.nih.gov/epigenomics/?db=epigenomics&cmd=link&linkname=epigenomics_epigenomics&uid="+obj.uid+"'>Similar</a><br><br>";
+							num++;
+						}
+						rs += "</td></tr>";
+					});
+					rs += "</table>";
+				}
+				if(db == "homologene"){
+					rs += "<table align='center' >";
+					var num = 1;
+					$.each(data.result,function(i,obj){
+						if(i != "uids"){
+							rs += "<tr><td valign='top' width='10px;'>"+(data.start+num)+"、</td>";
+							rs += "<td><a href='http://www.ncbi.nlm.nih.gov/homologene/"+obj.uid+"'>"+obj.title+"</a><br>";
+							rs += obj.description+"<br>";
+							rs += "<font color='silver'>hgid: "+obj.uid+"</font><br>";
+							num++;
+						}
+						rs += "</td></tr>";
+					});
+					rs += "</table>";
+				}
+				if(db == "toolkitbook"){
+					rs += "<table align='center' >";
+					var num = 1;
+					$.each(data.result,function(i,obj){
+						if(i != "uids"){
+							rs += "<tr><td valign='top' width='10px;'>"+(data.start+num)+"、</td>";
+							rs += "<td><a href='http://www.ncbi.nlm.nih.gov/toolkit/doc/book/"+obj.rid+"'>"+obj.oid+" - "+obj.title+"</a><br>";
+							rs += obj.bookinfo+"<br><br>";
+							num++;
+						}
+						rs += "</td></tr>";
+					});
+					rs += "</table>";
+				}
+				if(db == "omim"){
+					rs += "<table align='center' >";
+					var num = 1;
+					$.each(data.result,function(i,obj){
+						if(i != "uids"){
+							rs += "<tr><td valign='top' width='10px;'>"+(data.start+num)+"、</td>";
+							rs += "<td><a href='http://omim.org/entry/"+obj.uid+"'>"+obj.title+"</a><br>";
+							if(obj.locus != "")
+								rs += "Cytogenetic locations: "+obj.locus+"<br>";
+							rs += "<font color='silver'>OMIM: "+obj.uid+"</font><br>";
+							rs += "<a href='http://www.ncbi.nlm.nih.gov/gene?linkname=omim_gene&from_uid="+obj.uid+"'>Gene summaries </a>&nbsp;&nbsp;";
+							rs += "<a href='http://www.ncbi.nlm.nih.gov/gtr/tests/?term="+obj.uid+"[mim]'>Genetic tests  </a>&nbsp;&nbsp;";
+							rs += "<a href='http://www.ncbi.nlm.nih.gov/pubmed?linkname=omim_pubmed_cited&from_uid="+obj.uid+"'>Medical literature  </a><br><br>";
+							num++;
+						}
+						rs += "</td></tr>";
+					});
+					rs += "</table>";
+				}
+				if(db == "geoprofiles"){
+					rs += "<table align='center' >";
+					var num = 1;
+					$.each(data.result,function(i,obj){
+						if(i != "uids"){
+							rs += "<tr><td valign='top' width='10px;'>"+(data.start+num)+"、</td>";
+							rs += "<td><a href='http://omim.org/entry/"+obj.uid+"'>"+obj.title+"</a><br>";
+							if(obj.locus != "")
+								rs += "Cytogenetic locations: "+obj.locus+"<br>";
+							rs += "<font color='silver'>OMIM: "+obj.uid+"</font><br>";
+							rs += "<a href='http://www.ncbi.nlm.nih.gov/gene?linkname=omim_gene&from_uid="+obj.uid+"'>Gene summaries </a>&nbsp;&nbsp;";
+							rs += "<a href='http://www.ncbi.nlm.nih.gov/gtr/tests/?term="+obj.uid+"[mim]'>Genetic tests  </a>&nbsp;&nbsp;";
+							rs += "<a href='http://www.ncbi.nlm.nih.gov/pubmed?linkname=omim_pubmed_cited&from_uid="+obj.uid+"'>Medical literature  </a><br><br>";
+							num++;
+						}
+						rs += "</td></tr>";
+					});
+					rs += "</table>";
+				}
+				if(db == "clinvar"){
+					rs += "<table align='center' >";
+					$.each(data.result,function(i,obj){
+						if(i != "uids"){
+							rs += "<tr><td valign='top' colspan='2'><h2>"+obj.title+"</h2>";
+							rs += "<h3><font color='red'>"+obj.title+"</font></h3></td></tr>";
+							rs += "<tr><td>Variant type: </td><td>"+obj.variation_set[0].variant_type+"</td></tr>";
+							rs += "<tr><td>Cytogenetic location: </td><td>---</td></tr>";
+							if(obj.variation_set[0].variation_loc[0] != null){
+								
+								rs += "<tr><td>Genomic location: </td><td><font color='silver'>|</font>Chr10: "+obj.variation_set[0].variation_loc[0].stop+"(on Assembly "+obj.variation_set[0].variation_loc[0].assembly_name+")</td></tr>";
+								rs += "<tr><td></td><td><font color='silver'>|</font>Chr10: "+obj.variation_set[0].variation_loc[1].stop+"(on Assembly "+obj.variation_set[0].variation_loc[1].assembly_name+")</td></tr>";
+							}
+							rs += "<tr><td>Protein change: </td><td>---</td></tr>";
+							rs += "<tr><td>HGVS: </td><td>--</td></tr>";
+							$.each(obj.variation_set[0].aliases,function(n,oname){
+								
+								rs += "<tr><td>Other names: </td><td><font color='silver'>|</font>"+oname+" , </td></tr>";
+							});
+							rs += "<tr><td>Links: </td><td>"+obj.variation_set[0].variation_xrefs[0].db_source+": <a href='http://www.omim.org/entry/"+obj.variation_set[0].variation_xrefs[0].db_id.replace('.','#')+"'>"+obj.variation_set[0].variation_xrefs[0].db_id+"</a></td></tr>";
+							if(obj.variation_set[0].variation_xrefs[1] != null){
+								
+								rs += "<tr><td></td><td>"+obj.variation_set[0].variation_xrefs[1].db_source+": <a href='http://www.omim.org/entry/"+obj.variation_set[0].variation_xrefs[1].db_id.replace('.','#')+"'>"+obj.variation_set[0].variation_xrefs[1].db_id+"</a></td></tr>";
+							}
+							if(obj.variation_set[0].variation_loc[0] != null){
+								rs += "<tr><td>NCBI 1000 Genomes Browser:</td><td><a href='http://www.ncbi.nlm.nih.gov/variation/tools/1000genomes/?chr=10&from="+obj.variation_set[0].variation_loc[0].start+"&to="+obj.variation_set[0].variation_loc[0].stop+"&gts=rs"+obj.variation_set[0].variation_xrefs[1].db_id+"&mk="+obj.variation_set[0].variation_loc[0].start+":"+obj.variation_set[0].variation_loc[0].stop+"|rs"+obj.variation_set[0].variation_xrefs[1].db_id+"'>rs"+obj.variation_set[0].variation_xrefs[1].db_id+"</a></td></tr>";
+							}
+							rs += "<tr><td>Molecular consequence:</td><td>--</td></tr>";
+							
+						}
+					});
+					rs += "</table>";
+				}
+				if(db == "dbvar"){
+					var temptype = "";
+					$.each(data.result,function(i,obj){
+						if(obj.obj_type == "VARIANT")
+							temptype = "VARIANT";
+						if(obj.obj_type == "STUDY")
+							temptype = "STUDY";
+					});
+					
+					if(temptype == "VARIANT"){
+							
+						rs += "<table align='center' width='1000px;' style='border-collapse:collapse;'>";
+						rs += "<tr><td valign='top' colspan='8'>";
+						rs += "<h3><font color='red'>Number of Variants: "+data.count+"</font></h3></td></tr>";
+						rs += "<tr  style='border:1px solid #eee;' bgcolor='#98D470'><td>Variant Region ID</td><td>Type</td><td>Number of Variant Calls</td><td>Study ID</td><td>Organism</td><td>Clinical Assertion</td><td>Location</td><td>Genes in region</td></tr>";
+						$.each(data.result,function(i,obj){
+							
+							if(i != "uids"){
+								
+								rs += "<tr><td width='100px;'>"+obj.sv+"</td>";
+								rs += "<td width='100px;'>"+obj.dbvarvarianttypelist[0]+"</td>";
+								rs += "<td width='10px;'>"+obj.variant_call_count+"</td>";
+								rs += "<td width='100px;'><a href='http://www.ncbi.nlm.nih.gov/dbvar/studies/"+obj.st+"'>"+obj.st+"</a></td>";
+								rs += "<td width='100px;'>"+obj.organism+"</td>";
+								rs += "<td width='90px;'></td>";
+								rs += "<td width='400px;'>";
+								$.each(obj.dbvarplacementlist,function(n,da){
+									rs += "<a href='http://www.ncbi.nlm.nih.gov/dbvar/browse/org/?taxid="+da.assembly_tax_id+"&assm="+da.assembly_accession+"&chr="+da.chr_accession_version+"&studies="+obj.st+"&variant="+obj.sv+"'>"+da.assembly+"chr"+da.chr+":"+da.chr_outer_start+"-"+da.chr_outer_end+"</a> , ";
+	
+								});
+								rs += "</td>";
+								rs += "<td width='100px;'>";
+								$.each(obj.dbvargenelist,function(m,dd){
+									rs += dd.name+"<br>";
+								});
+								rs += "</td>";
+								rs += "</tr>";
+								
+								
+							}
+						});
+						rs += "</table>";
+					}
+					if(temptype == "STUDY"){
+							
+						rs += "<table align='center' width='1000px;' style='border-collapse:collapse;'>";
+						rs += "<tr><td valign='top' colspan='8'>";
+						rs += "<h3><font color='red'>Number of Studies: "+data.count+"</font></h3></td></tr>";
+						rs += "<tr  style='border:1px solid #eee;' bgcolor='#98D470'><td>Study ID</td><td>Organism</td><td>Study type</td><td>Number of variant regions</td><td>Publication</td></tr>";
+						$.each(data.result,function(i,obj){
+							
+							if(i != "uids"){
+								
+								rs += "<tr><td width='125px;'>"+obj.st+"</td>";
+								rs += "<td width='125px;'>"+obj.dbvarstudyorglist[0].species+"</td>";
+								rs += "<td width='150px;'>"+obj.study_type+"</td>";
+								rs += "<td width='200px;'>"+obj.variant_count+"</td>";
+								rs += "<td width='200px;'><a href='http://www.ncbi.nlm.nih.gov/pubmed/"+obj.dbvarpublicationlist[0].pmid+"'>"+obj.dbvarpublicationlist[0].publication_name+"</a> </td> ";
+								
+								rs += "</tr>";
+								
+								
+							}
+						});
+						rs += "</table>";
+					}
+				
+				}
 				
 				rs += "<table align='center' width='1000px;'><tr><td colspan='4' align='center'>";
 				if(Math.ceil(data.count/20) != 0){
@@ -755,15 +939,12 @@ $(function(){
 });
 
 
-/*
- * 
- db=genomeprj(没有案例) & db=blastdbinfo(没有案例)  &db=books数据库在模板和直接在网址输入查询结果不一样 & db=cdd(没有案例) & db = clinvar查不出来数据
- */
+
 </script>
 </head>
 <body>
 <div id="rs_data"></div>
 <br>
-<table><tr ><td  style="text-align: "></td></tr></table>
+<table><tr ><td  style="text-align: " colspan="1"></td></tr></table>
 </body>
 </html>
