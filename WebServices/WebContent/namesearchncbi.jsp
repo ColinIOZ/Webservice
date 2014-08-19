@@ -9,7 +9,7 @@ String db=request.getParameter("db");
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>Name search BCBI</title>
+<title>Name search NCBI</title>
 
 <script type="text/javascript" src="js/jquery-1.9.1.js"></script>
 <script>
@@ -214,6 +214,48 @@ $(function(){
 							
 							rs += "<tr><td  valign='top'>"+(data.start+num)+"、</td>";
 							rs += "<td><a href='http://www.ncbi.nlm.nih.gov/"+db+"/"+obj.uid+"'>"+obj.title+"</a><br><br>";
+							num++;
+						}
+						rs += "</td></tr>";
+					});
+					rs += "</table>";
+				}
+				if(db == "gapplus"){
+					rs += "<table align='center'>";
+					var num = 1;
+					$.each(data.result,function(i,obj){
+						if(i != "uids"){
+							
+							rs += "<tr><td  valign='top'>"+(data.start+num)+"、</td>";
+							rs += "<td><a href='http://www.ncbi.nlm.nih.gov/"+db+"/"+obj.uid+"'>"+obj.publication.title+"</a><br><br>";
+							num++;
+						}
+						rs += "</td></tr>";
+					});
+					rs += "</table>";
+				}
+				if(db == "orgtrack"){
+					rs += "<table align='center'>";
+					var num = 1;
+					$.each(data.result,function(i,obj){
+						if(i != "uids"){
+							
+							rs += "<tr><td  valign='top'>"+(data.start+num)+"、</td>";
+							rs += "<td><a href='http://www.ncbi.nlm.nih.gov/"+db+"/"+obj.uid+"'>"+obj.title+"</a><br><br>";
+							num++;
+						}
+						rs += "</td></tr>";
+					});
+					rs += "</table>";
+				}
+				if(db == "gtr"){
+					rs += "<table align='center'>";
+					var num = 1;
+					$.each(data.result,function(i,obj){
+						if(i != "uids"){
+							
+							rs += "<tr><td  valign='top'>"+(data.start+num)+"、</td>";
+							rs += "<td><a href='http://www.ncbi.nlm.nih.gov/"+db+"/"+obj.uid+"'>"+obj.testname+"</a><br><br>";
 							num++;
 						}
 						rs += "</td></tr>";
@@ -791,19 +833,26 @@ $(function(){
 					$.each(data.result,function(i,obj){
 						if(i != "uids"){
 							rs += "<tr><td valign='top' width='10px;'>"+(data.start+num)+"、</td>";
-							rs += "<td><a href='http://omim.org/entry/"+obj.uid+"'>"+obj.title+"</a><br>";
-							if(obj.locus != "")
-								rs += "Cytogenetic locations: "+obj.locus+"<br>";
-							rs += "<font color='silver'>OMIM: "+obj.uid+"</font><br>";
-							rs += "<a href='http://www.ncbi.nlm.nih.gov/gene?linkname=omim_gene&from_uid="+obj.uid+"'>Gene summaries </a>&nbsp;&nbsp;";
-							rs += "<a href='http://www.ncbi.nlm.nih.gov/gtr/tests/?term="+obj.uid+"[mim]'>Genetic tests  </a>&nbsp;&nbsp;";
-							rs += "<a href='http://www.ncbi.nlm.nih.gov/pubmed?linkname=omim_pubmed_cited&from_uid="+obj.uid+"'>Medical literature  </a><br><br>";
+							rs += "<td><a href='http://www.ncbi.nlm.nih.gov/geoprofiles/"+obj.uid+"'>"+(obj.orf==""?'':obj.orf+" - ")+obj.title+"</a><br>";
+							if(obj.orf != "" && obj.genedesc != "")
+								rs += "Annotation: <a href='http://www.ncbi.nlm.nih.gov/gene?Db=gene&DbFrom=geoprofiles&Cmd=Link&LinkName=geoprofiles_gene&IdsFromResult="+obj.uid+"'>"+obj.orf+"</a> , "+(obj.genedesc.indexOf('&lt;:&gt;')!=-1?obj.genedesc.substring(0,obj.genedesc.indexOf('&lt;:&gt;'))+"(multiple annotations exist)":obj.genedesc)+"<br>";
+							else
+								rs += "Annotation: No annotation available <br>";	
+							rs += "Organism: <b>"+obj.taxon.substring(0,obj.taxon.indexOf(' '))+"</b>"+obj.taxon.substring(obj.taxon.indexOf(' '))+"<br>";
+							rs += "Reporter: GPL "+obj.gpl+" , <b>"+obj.idref+"</b>(ID_REF), "+obj.orf+"(ORF)<br>";
+							rs += "DataSet type: "+obj.gdstype+" , "+obj.valtype+"<br>";
+							rs += "<font color='silver'>ID: "+obj.uid+"</font><br>";
+							rs += "<a href='http://www.ncbi.nlm.nih.gov/gds?LinkName=geoprofiles_gds&from_uid="+obj.uid+"'>GEO DataSets </a>&nbsp;&nbsp;";
+							rs += "<a href='http://www.ncbi.nlm.nih.gov/gene?LinkName=geoprofiles_gene&from_uid="+obj.uid+"'>Gene </a>&nbsp;&nbsp;";
+							rs += "<a href='http://www.ncbi.nlm.nih.gov/geoprofiles?LinkName=geoprofiles_geoprofiles_prof&from_uid="+obj.uid+"'>Profile neighbors  </a>&nbsp;&nbsp;";
+							rs += "<a href='http://www.ncbi.nlm.nih.gov/geoprofiles?LinkName=geoprofiles_geoprofiles_chr&from_uid="+obj.uid+"'>Chromosome neighbors  </a><br><br>";
 							num++;
 						}
 						rs += "</td></tr>";
 					});
 					rs += "</table>";
 				}
+				
 				if(db == "clinvar"){
 					rs += "<table align='center' >";
 					$.each(data.result,function(i,obj){
